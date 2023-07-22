@@ -4,7 +4,7 @@ import {
   Handler,
 } from "aws-lambda";
 import fetch from "node-fetch";
-import { emailComponentPicker } from "./emails/emailComponentPicker";
+import { emailComponentPicker } from "./src/emails/emailComponentPicker";
 
 const RESEND_API_KEY = process.env["RESEND_API_KEY"];
 

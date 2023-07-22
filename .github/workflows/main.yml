@@ -26,7 +26,7 @@ jobs:
           npm ci
       - name: Zip and deploy
         run: |
-          npx ncc build src/index.ts
+          npx ncc build index.ts
           mv node_modules dist/
           cd dist && zip -r deploy.zip ./*
         #   aws lambda update-function-code --function-name=resend_send --zip-file=fileb://dist/deploy.zip
