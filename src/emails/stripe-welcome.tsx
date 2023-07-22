@@ -5,7 +5,6 @@ import {
   Head,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Section,
@@ -13,9 +12,9 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : '';
+// const baseUrl = process.env.VERCEL_URL
+//   ? `https://${process.env.VERCEL_URL}`
+//   : '';
 
 export const StripeWelcomeEmail = () => (
   <Html>
@@ -24,12 +23,12 @@ export const StripeWelcomeEmail = () => (
     <Body style={main}>
       <Container style={container}>
         <Section style={box}>
-          <Img
+          {/* <Img
             src={`${baseUrl}/static/stripe-logo.png`}
             width="49"
             height="21"
             alt="Stripe"
-          />
+          /> */}
           <Hr style={hr} />
           <Text style={paragraph}>
             Thanks for submitting your account information. You're now ready to

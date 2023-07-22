@@ -4,7 +4,7 @@ import {
   Handler,
 } from "aws-lambda";
 import fetch from "node-fetch";
-import { emailComponentPicker } from "./src/emails/emailComponentPicker";
+import { EmailTemplate } from "./src/emails/test";
 
 const RESEND_API_KEY = process.env["RESEND_API_KEY"];
 
@@ -42,8 +42,6 @@ export const handler: Handler = async (
     };
   }
 
-  const EmailComponent = emailComponentPicker(emailType);
-
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -55,7 +53,7 @@ export const handler: Handler = async (
         from: "onboarding@resend.dev",
         to: ["kaarthikandavar@gmail.com"],
         subject: "hello world",
-        react: EmailComponent,
+        react: EmailTemplate({ firstName: "John" }),
       }),
     });
 
