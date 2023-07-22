@@ -12,13 +12,13 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",
     "@types/react": "^18.2.15",
+    "@vercel/ncc": "^0.36.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "@react-email/components": "^0.0.7",
     "aws-lambda": "^1.0.7",
     "node-fetch": "^3.3.1",
-    "react-email": "^1.9.4",
-    "@vercel/ncc": "^0.27.0"
+    "react-email": "^1.9.4"
   }
 }
