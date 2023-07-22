@@ -54,6 +54,8 @@ export const handler: Handler = async (
         to: ["kaarthikandavar@gmail.com"],
         subject: "hello world",
         react: EmailTemplate({ firstName: "John" }),
+        html: "<h1>Hello world</h1>",
+        text: "Hello world",
       }),
     });
 
