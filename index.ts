@@ -60,6 +60,10 @@ export const handler: Handler = async (
     });
 
     if (!res.ok) {
+      const errorDetails = await res.text();
+      console.error(
+        `API request failed with status ${res.status} and message: ${errorDetails}`
+      );
       throw new Error("API request failed");
     }
 
