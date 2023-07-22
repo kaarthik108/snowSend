@@ -4,7 +4,7 @@ import {
   Handler,
 } from "aws-lambda";
 import fetch from "node-fetch";
-import { EmailTemplate } from "./src/emails/test";
+import { renderEmail } from "renderEmail"; // Import the function from the .tsx file
 
 const RESEND_API_KEY = process.env["RESEND_API_KEY"];
 
@@ -12,6 +12,11 @@ interface ResendResponse {
   id: string;
   message?: string;
 }
+
+const html = renderEmail(
+  "Kaarthik", // Provide title as a string
+  "/" // Provide link as a string
+);
 
 export const handler: Handler = async (
   event: APIGatewayProxyEvent
@@ -53,8 +58,7 @@ export const handler: Handler = async (
         from: "onboarding@resend.dev",
         to: ["kaarthikandavar@gmail.com"],
         subject: "hello world",
-        react: EmailTemplate({ firstName: "John" }),
-        html: "<h1>Hello world</h1>",
+        html: html,
         text: "Hello world",
       }),
     });
