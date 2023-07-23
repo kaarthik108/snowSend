@@ -23,10 +23,11 @@ jobs:
         env:
           CI: true
         run: |
+          cd src
           npm ci
       - name: Zip and deploy
         run: |
-          npx ncc build src/index.ts -o src
           cd src
-          zip -r deploy.zip ./* -x "*.react-email*"
+          npx ncc build index.ts
+          zip -r deploy.zip ./dist/* -x "*.react-email*"
           aws lambda update-function-code --function-name=resend_send --zip-file=fileb://deploy.zip
