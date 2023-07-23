@@ -1,0 +1,31 @@
+{
+  "name": "snowsend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    ".react-email"
+  ],
+  "scripts": {
+    "dev": "email dev",
+    "export": "email export"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vercel/ncc": "^0.36.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.7",
+    "@react-email/render": "0.0.7",
+    "aws-lambda": "^1.0.7",
+    "node-fetch": "^3.3.1",
+    "react-email": "^1.9.4",
+    "resend": "^0.17.1"
+  }
+}
