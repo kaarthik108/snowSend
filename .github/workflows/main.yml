@@ -26,8 +26,6 @@ jobs:
           npm ci
       - name: Zip and deploy
         run: |
-          npx ncc build index.ts -o dist
-          zip -r deploy.zip . -x "node_modules/*" ".react-email/*" "dist/*"
-          mv deploy.zip dist/
-          ls dist
-          aws lambda update-function-code --function-name=resend_send --zip-file=fileb://dist/deploy.zip
+          npx ncc build index.ts -o .
+          zip -r deploy.zip * -x "dist/*" ".react-email/*"
+          aws lambda update-function-code --function-name=resend_send --zip-file=fileb://deploy.zip
