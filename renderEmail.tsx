@@ -1,7 +1,24 @@
 import { render } from "@react-email/render";
-import React from "react";
-import TestTemplate from "./src/emails/TestTemplate";
+import StripeWelcomeEmail from "emails/stripe-welcome";
+import TestTemplate from "emails/TestTemplate";
+import React, { ReactElement } from "react";
 
-export function renderEmail(title: string, link: string) {
-    return render(<TestTemplate title={title} link={link} />);
+interface EmailComponents {
+    [key: string]: (props: any) => ReactElement;
+}
+
+const emailComponents: EmailComponents = {
+    "test": TestTemplate,
+    "stripe": StripeWelcomeEmail
+    // Add other email types and their corresponding components
+};
+
+interface EmailData {
+    emailType: string;
+    [key: string]: any;
+}
+
+export function renderEmail(emailData: EmailData) {
+    const EmailComponent = emailComponents[emailData.emailType];
+    return render(<EmailComponent {...emailData} />);
 }

@@ -21,6 +21,6 @@
     "baseUrl": "./",
     "esModuleInterop": true
   },
-  "include": ["src/**/*", "index.ts"],
+  "include": ["src/**/*", "index.ts", "emailsl-starter/emails"],
   "exclude": ["node_modules"]
 }

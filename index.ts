@@ -4,7 +4,7 @@ import {
   Handler,
 } from "aws-lambda";
 import fetch from "node-fetch";
-import { renderEmail } from "renderEmail"; // Import the function from the .tsx file
+import { renderEmail } from "renderEmail";
 
 const RESEND_API_KEY = process.env["RESEND_API_KEY"];
 
@@ -13,29 +13,29 @@ interface ResendResponse {
   message?: string;
 }
 
-const html = renderEmail(
-  "Kaarthik", // Provide title as a string
-  "/" // Provide link as a string
-);
+interface EmailData {
+  emailType: string;
+  [key: string]: any; // This can contain title, link, or any other properties
+}
 
 export const handler: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResultV2> => {
-  if (!event.queryStringParameters) {
+  if (!event.body) {
     return {
       statusCode: 400,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message: "Missing query string parameters",
+        message: "Missing event body",
       }),
     };
   }
 
-  // Instantiate the email component
-  const emailType = event.queryStringParameters.emailType;
-  if (!emailType) {
+  const emailData: EmailData = JSON.parse(event.body);
+
+  if (!emailData.emailType) {
     return {
       statusCode: 400,
       headers: {
@@ -47,6 +47,9 @@ export const handler: Handler = async (
     };
   }
 
+  // Dynamically render the appropriate email based on the email type
+  const html = renderEmail(emailData);
+
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -57,9 +60,9 @@ export const handler: Handler = async (
       body: JSON.stringify({
         from: "onboarding@resend.dev",
         to: ["kaarthikandavar@gmail.com"],
-        subject: "hello world",
+        subject: emailData.subject,
         html: html,
-        text: "Hello world",
+        text: "This is a test email",
       }),
     });
 
