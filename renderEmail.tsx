@@ -1,15 +1,17 @@
 import { render } from "@react-email/render";
-import StripeWelcomeEmail from "emails/stripe-welcome";
 import TestTemplate from "emails/TestTemplate";
-import React, { ReactElement } from "react";
+import SnowBrainEmail from "emails/snowBrain-template";
+import StripeWelcomeEmail from "emails/stripe-welcome";
+import React from "react";
 
 interface EmailComponents {
-    [key: string]: (props: any) => ReactElement;
+    [key: string]: (props: any) => React.ReactNode;
 }
 
 const emailComponents: EmailComponents = {
     "test": TestTemplate,
-    "stripe": StripeWelcomeEmail
+    "stripe": StripeWelcomeEmail,
+    "product": SnowBrainEmail
     // Add other email types and their corresponding components
 };
 
