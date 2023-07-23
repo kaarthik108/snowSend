@@ -21,6 +21,8 @@ interface EmailData {
 export const handler: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResultV2> => {
+  console.log("event body is ------", event.body);
+
   if (!event.body) {
     return {
       statusCode: 400,
@@ -35,6 +37,7 @@ export const handler: Handler = async (
 
   const emailData: EmailData = JSON.parse(event.body);
 
+  console.log("email data is ------", emailData);
   if (!emailData.emailType) {
     return {
       statusCode: 400,
