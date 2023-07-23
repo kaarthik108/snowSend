@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import TestTemplate from "emails/TestTemplate";
-import SnowBrainEmail from "emails/snowBrain-template";
+import SnowBrainEmail from "emails/snowbrain-template";
 import StripeWelcomeEmail from "emails/stripe-welcome";
 import React from "react";
 
