@@ -34,8 +34,10 @@ export const handler: Handler = async (
       }),
     };
   }
+  const bodyObject = JSON.parse(event.body);
+  const emailJsonString = bodyObject.data[0][1];
 
-  const emailData: EmailData = JSON.parse(event.body);
+  const emailData: EmailData = JSON.parse(emailJsonString);
 
   console.log("email data is ------", emailData);
   if (!emailData.emailType) {
