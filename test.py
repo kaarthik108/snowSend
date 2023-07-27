@@ -13,10 +13,11 @@ class SnowSendTest:
 executor = SnowSendTest()
 
 sql_command = """
-SELECT snowsend('{
+SELECT ANALYTICS.PUBLIC."snowsend-2a31d34"('{
   "emailType": "test",
-  "subject": "Welcome to our service!",
+  "subject": "Welcome to our service!"
 }');
+
 """
 
 try:
