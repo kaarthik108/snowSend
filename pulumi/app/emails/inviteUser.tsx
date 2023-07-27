@@ -29,17 +29,13 @@ interface VercelInviteUserEmailProps {
     inviteFromLocation?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : '';
-
 export const VercelInviteUserEmail = ({
     username = 'zenorocha',
-    userImage = `${baseUrl}/static/vercel-user.png`,
+    userImage = `../static/vercel-user.png`,
     invitedByUsername = 'bukinoshita',
     invitedByEmail = 'bukinoshita@example.com',
     teamName = 'My Project',
-    teamImage = `${baseUrl}/static/vercel-team.png`,
+    teamImage = `../static/vercel-team.png`,
     inviteLink = 'https://vercel.com/teams/invite/foo',
     inviteFromIp = '204.13.186.218',
     inviteFromLocation = 'São Paulo, Brazil',
@@ -55,7 +51,7 @@ export const VercelInviteUserEmail = ({
                     <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
                         <Section className="mt-[32px]">
                             <Img
-                                src={`${baseUrl}/static/vercel-logo.png`}
+                                src={`../static/vercel-logo.png`}
                                 width="40"
                                 height="37"
                                 alt="Vercel"
@@ -86,7 +82,7 @@ export const VercelInviteUserEmail = ({
                                 </Column>
                                 <Column align="center">
                                     <Img
-                                        src={`${baseUrl}/static/vercel-arrow.png`}
+                                        src={`../static/vercel-arrow.png`}
                                         width="12"
                                         height="9"
                                         alt="invited you to"

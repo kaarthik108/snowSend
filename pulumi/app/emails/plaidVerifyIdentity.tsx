@@ -15,10 +15,6 @@ interface PlaidVerifyIdentityEmailProps {
   validationCode?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : '';
-
 export const PlaidVerifyIdentityEmail = ({
   validationCode = '144833',
 }: PlaidVerifyIdentityEmailProps) => (
@@ -27,7 +23,7 @@ export const PlaidVerifyIdentityEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/plaid-logo.png`}
+          src={`../static/plaid-logo.png`}
           width="212"
           height="88"
           alt="Plaid"

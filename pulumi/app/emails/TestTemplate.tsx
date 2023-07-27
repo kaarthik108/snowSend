@@ -1,22 +1,42 @@
-// src/emails/testTemplate.tsx
-import { Button } from '@react-email/button';
-import { Hr } from '@react-email/hr';
-import { Html } from '@react-email/html';
-import { Text } from '@react-email/text';
+import {
+    Body,
+    Button,
+    Container,
+    Html,
+    Img,
+    Tailwind,
+    Text
+} from '@react-email/components';
 import * as React from 'react';
 
-type TestTemplateProps = {
-    /* Define the shape of the props here. For example: */
+interface TestTemplateProps {
     title: string;
     link: string;
+    imageLink: string;
+    description: string;
 };
 
-const TestTemplate: React.FC<TestTemplateProps> = ({ title, link }) => {
+const TestTemplate: React.FC<TestTemplateProps> = ({
+    title = 'Hello, User!',
+    link = 'https://example.com',
+    imageLink = '../static/plaid-logo.png',
+    description = 'This is a sample email template.'
+}) => {
     return (
         <Html lang="en">
-            <Text>{title}</Text>
-            <Hr />
-            <Button href={link}>Click me</Button>
+            <Tailwind>
+                <Body className="bg-gray-100 font-sans flex items-center justify-center h-screen">
+                    <Container className="border border-gray-200 rounded-lg p-8 bg-white text-center shadow-lg max-w-md mx-auto">
+                        <Img className="rounded-full mx-auto mb-4 w-24 h-24 object-cover" src={imageLink} alt="Sample Image" />
+                        <Text className="text-black text-2xl font-semibold mb-2">{title}</Text>
+                        <Text className="text-gray-500 mb-4">{description}</Text>
+                        <hr className="border-t border-gray-300 my-4" />
+                        <Button href={link} className="inline-block bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded">
+                            Click me
+                        </Button>
+                    </Container>
+                </Body>
+            </Tailwind>
         </Html>
     )
 };

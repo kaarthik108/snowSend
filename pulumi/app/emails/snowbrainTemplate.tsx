@@ -18,14 +18,10 @@ interface SnowBrainEmailProps {
     username?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : '';
-
 export const SnowBrainEmail = ({
-    username = 'User',
+    username = 'people from earth',
 }: SnowBrainEmailProps) => {
-    const previewText = `Discover SnowBrain - AI driven snowflake insights`;
+    const previewText = `Introducing SnowBrain: Transforming Data Interaction Through AI`;
 
     return (
         <Html>
@@ -35,20 +31,20 @@ export const SnowBrainEmail = ({
                 <Body className="bg-gray-100 flex justify-center items-center h-screen font-sans">
                     <Container className="bg-white border border-gray-300 rounded-lg mx-auto p-8 w-full max-w-2xl">
                         <Section className="flex justify-center text-5xl font-bold mb-8">
-                            <>&lt;&gt;</>
+                            <Text className="text-gray-900">SnowBrain</Text>
                         </Section>
                         <Section className="text-center">
                             <Heading className="text-gray-900 text-2xl font-semibold mb-4">
-                                Welcome to <strong>SnowBrain</strong>
+                                Unleash the Power of <strong>SnowBrain</strong>
                             </Heading>
                             <Text className="text-gray-700 leading-relaxed">
-                                Dear {username},
+                                Hi {username},
                             </Text>
                             <Text className="text-gray-700 leading-relaxed mt-4">
-                                We are excited to introduce SnowBrain - an open-source prototype designed to be your personal data analyst. Powered by cutting-edge technology, SnowBrain provides a new way of interacting with your data.
+                                We are proud to introduce SnowBrain, your personal AI-powered data analyst. This state-of-the-art, open-source solution revolutionizes data interaction with unprecedented intuitiveness and efficiency.
                             </Text>
                             <Text className="text-gray-700 leading-relaxed mt-4">
-                                By combining the strengths of Snowflake, Langchain, OpenAI, Pinecone, NEXTjs, and FastAPI, among others, SnowBrain reimagines the simplicity of SQL querying. Whether you're a data novice or an experienced analyst, SnowBrain can help you explore, understand, and visualize your data in an intuitive way.
+                                Merging the capabilities of Snowflake, Langchain, OpenAI, Pinecone, NEXTjs, and FastAPI, SnowBrain offers a streamlined SQL querying experience. Regardless of your expertise level, SnowBrain enables you to explore, comprehend, and visualize your data like never before.
                             </Text>
                             <Section className="mt-8 mb-4">
                                 <Button
@@ -57,18 +53,18 @@ export const SnowBrainEmail = ({
                                     className="bg-blue-600 hover:bg-blue-700 rounded text-white text-sm font-semibold"
                                     href="https://snowbrain.dev"
                                 >
-                                    Discover SnowBrain
+                                    Experience SnowBrain
                                 </Button>
                             </Section>
                             <Section className="mt-8 mb-4">
                                 <img
-                                    src={`${baseUrl}/static/snowbrain-logo.png`}
-                                    alt="SnowBrain screenshot"
+                                    src={`../static/snowbrain-logo.png`}
+                                    alt="SnowBrain Logo"
                                     className="rounded-lg w-full max-w-md mx-auto"
                                 />
                             </Section>
                             <Text className="text-gray-700 leading-relaxed mt-4">
-                                SnowBrain is also an open-source project. We encourage you to explore our codebase, offer suggestions, or even contribute to its development. You can find our GitHub repository at the following link:
+                                As an open-source project, we invite you to explore our codebase, propose enhancements, or contribute to our development journey. Visit our GitHub repository here:
                                 <Link
                                     href="https://github.com/kaarthik108/snowBrain"
                                     className="text-blue-600 underline"
@@ -78,8 +74,7 @@ export const SnowBrainEmail = ({
                             </Text>
                             <Hr className="border-gray-200 my-8" />
                             <Text className="text-gray-500 text-sm leading-relaxed">
-                                This email was intended for{' '}
-                                <span className="text-gray-900">{username}</span>. If you were not expecting this email, you can ignore it. However, if you have any questions or need further assistance, please don't hesitate to reply to this email.
+                                If you were not the intended recipient of this email or if you have any inquiries or require assistance, feel free to respond to this email.
                             </Text>
                         </Section>
                     </Container>

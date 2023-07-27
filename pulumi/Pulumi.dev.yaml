@@ -11,3 +11,4 @@ config:
   snowsend:apiAwsRoleArn:
     secure: AAABAMONtON8qC/wF/bw/1KVbTD6T3JX2RGzLuSxVBO1FGXKEV4FO62sc+nPSocuflpJcEKZj+2bnE5P9tBWRdxOR9Y2KZmgJQ==
   snowsend:awsAccountId: "662141974106"
+  # snowsend:externalFuncId: ANALYTICS|PUBLIC|snowsend-05a108f|string

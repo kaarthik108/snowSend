@@ -6,6 +6,7 @@ import * as snowflake from "@pulumi/snowflake";
 let config = new pulumi.Config();
 let apiAwsExternalId = config.get("apiAwsExternalId") || "default_external_id";
 let apiAwsRoleArn = config.get("apiAwsRoleArn") || "default_role_arn";
+let externalFuncId = config.get("externalFuncId");
 
 const repo = new awsx.ecr.Repository("repo", {
   forceDelete: true,
@@ -168,22 +169,28 @@ const apiIntegration = new snowflake.ApiIntegration("snowsend_api_gateway", {
   enabled: true,
 });
 
-new snowflake.ExternalFunction("snowsend", {
-  apiIntegration: apiIntegration.name,
-  args: [
-    {
-      name: "msg",
-      type: "string",
-    },
-  ],
-  returnBehavior: "VOLATILE",
-  returnType: "variant",
-  urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}`,
-  database: "ANALYTICS",
-  schema: "PUBLIC",
-});
+let externalFunc;
+
+if (externalFuncId) {
+  console.log("Function exists, no need to update.");
+} else {
+  console.log("Function does not exist, creating new function.");
+  externalFunc = new snowflake.ExternalFunction("snowsend", {
+    apiIntegration: apiIntegration.name,
+    args: [
+      {
+        name: "msg",
+        type: "string",
+      },
+    ],
+    returnBehavior: "VOLATILE",
+    returnType: "variant",
+    urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}`,
+    database: "ANALYTICS",
+    schema: "PUBLIC",
+  });
+}
 
 export const actualApiAwsExternalId = apiIntegration.apiAwsExternalId;
 export const actualApiAwsRoleArn = apiIntegration.apiAwsRoleArn;
-export const _methodArn = methodArn;
-export const apiGatewayPolicyDocument = apiGatewayPolicy.policy;
+export const createdExternalFuncID = externalFunc ? externalFunc.id : undefined;
