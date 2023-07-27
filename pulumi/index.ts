@@ -171,9 +171,12 @@ const apiIntegration = new snowflake.ApiIntegration("snowsend_api_gateway", {
 
 let externalFunc;
 
-if (externalFuncId) {
+try {
+  externalFunc = pulumi.output(
+    snowflake.ExternalFunction.get("snowsend", externalFuncId!)
+  );
   console.log("Function exists, no need to update.");
-} else {
+} catch (error) {
   console.log("Function does not exist, creating new function.");
   externalFunc = new snowflake.ExternalFunction("snowsend", {
     apiIntegration: apiIntegration.name,
