@@ -1,0 +1,13 @@
+config:
+  aws:region: us-east-1
+  snowflake:account: mmb84807
+  snowflake:password:
+    secure: AAABANzZOTzW5qK4KQ/3cBuyy2Q41vNoiQfAXIUxgQEZ3pzpg6heOK1kJYMhadw=
+  snowflake:region: us-west-2
+  snowflake:role: ACCOUNTADMIN
+  snowflake:username: KAARTHIK
+  snowsend:apiAwsExternalId:
+    secure: AAABADXI1OhBfT5tGdnbqvj6TDIEA0e4JezGaESZGXuH8y1RpOx1DlaO7cjz4c7nEDBmsqeUUqZMII1IBdICAGZN6Kn5lP0pcTMlUQZ3Gw==
+  snowsend:apiAwsRoleArn:
+    secure: AAABAMONtON8qC/wF/bw/1KVbTD6T3JX2RGzLuSxVBO1FGXKEV4FO62sc+nPSocuflpJcEKZj+2bnE5P9tBWRdxOR9Y2KZmgJQ==
+  snowsend:awsAccountId: "662141974106"

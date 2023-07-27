@@ -1,5 +1,0 @@
-CREATE OR REPLACE API INTEGRATION snowsend_api_gateway
-  API_PROVIDER = aws_api_gateway
-  API_AWS_ROLE_ARN = '{AWS_IAM_ROLE_ARN}'
-  API_ALLOWED_PREFIXES = ('{INVOKE_URL}')
-  ENABLED = true;

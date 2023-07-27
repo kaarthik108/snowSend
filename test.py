@@ -16,8 +16,6 @@ sql_command = """
 SELECT snowsend('{
   "emailType": "test",
   "subject": "Welcome to our service!",
-  "title": "Hello new user",
-  "link": "http://example.com"
 }');
 """
 

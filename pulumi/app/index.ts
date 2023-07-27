@@ -21,8 +21,6 @@ interface EmailData {
 export const handler: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResultV2> => {
-  console.log("event body is ------", event.body);
-
   if (!event.body) {
     return {
       statusCode: 400,
@@ -34,12 +32,42 @@ export const handler: Handler = async (
       }),
     };
   }
-  const bodyObject = JSON.parse(event.body);
-  const emailJsonString = bodyObject.data[0][1];
 
-  const emailData: EmailData = JSON.parse(emailJsonString);
+  let bodyObject;
+  try {
+    bodyObject = JSON.parse(event.body);
+  } catch (e) {
+    console.error("Error parsing event body:", e);
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "Invalid event body",
+      }),
+    };
+  }
 
-  console.log("email data is ------", emailData);
+  const emailDataRaw: string = bodyObject?.data?.[0]?.[1];
+  let emailData: EmailData;
+
+  try {
+    emailData = JSON.parse(emailDataRaw);
+  } catch (e) {
+    console.error("Error parsing email data:", e);
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "Invalid or missing data",
+      }),
+    };
+  }
+  console.log("emailData", emailData);
+
   if (!emailData.emailType) {
     return {
       statusCode: 400,
@@ -103,3 +131,5 @@ export const handler: Handler = async (
     };
   }
 };
+
+export default handler;

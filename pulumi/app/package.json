@@ -8,13 +8,15 @@
   ],
   "scripts": {
     "dev": "email dev",
-    "export": "email export"
+    "export": "email export",
+    "build": "ncc build index.ts -o dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",
+    "@types/node-fetch": "^2.6.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vercel/ncc": "^0.36.1",
@@ -25,7 +27,6 @@
     "@react-email/render": "0.0.7",
     "aws-lambda": "^1.0.7",
     "node-fetch": "^3.3.1",
-    "react-email": "^1.9.4",
-    "resend": "^0.17.1"
+    "react-email": "^1.9.4"
   }
 }
