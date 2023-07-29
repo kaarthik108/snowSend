@@ -32,10 +32,11 @@ export const handler: Handler = async (
       }),
     };
   }
+  console.log("event.body", event.body);
+  let eventData;
 
-  let bodyObject;
   try {
-    bodyObject = JSON.parse(event.body);
+    eventData = JSON.parse(event.body);
   } catch (e) {
     console.error("Error parsing event body:", e);
     return {
@@ -49,26 +50,9 @@ export const handler: Handler = async (
     };
   }
 
-  const emailDataRaw: string = bodyObject?.data?.[0]?.[1];
-  let emailData: EmailData;
-
-  try {
-    emailData = JSON.parse(emailDataRaw);
-  } catch (e) {
-    console.error("Error parsing email data:", e);
-    return {
-      statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: "Invalid or missing data",
-      }),
-    };
-  }
-  console.log("emailData", emailData);
-
-  if (!emailData.emailType) {
+  const emailType = eventData.emailType;
+  console.log("emailType", emailType);
+  if (!emailType) {
     return {
       statusCode: 400,
       headers: {
@@ -80,6 +64,23 @@ export const handler: Handler = async (
     };
   }
 
+  let emailData: EmailData = { emailType: emailType };
+
+  try {
+    emailData = { ...emailData, ...eventData.body };
+  } catch (e) {
+    console.error("Error parsing event body:", e);
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "Invalid event body",
+      }),
+    };
+  }
+  console.log("emailData", emailData);
   // Dynamically render the appropriate email based on the email type
   const html = renderEmail(emailData);
 

@@ -6,9 +6,11 @@ config:
   snowflake:region: us-west-2
   snowflake:role: ACCOUNTADMIN
   snowflake:username: KAARTHIK
-  snowsend:apiAwsExternalId:
-    secure: AAABADXI1OhBfT5tGdnbqvj6TDIEA0e4JezGaESZGXuH8y1RpOx1DlaO7cjz4c7nEDBmsqeUUqZMII1IBdICAGZN6Kn5lP0pcTMlUQZ3Gw==
-  snowsend:apiAwsRoleArn:
-    secure: AAABAMONtON8qC/wF/bw/1KVbTD6T3JX2RGzLuSxVBO1FGXKEV4FO62sc+nPSocuflpJcEKZj+2bnE5P9tBWRdxOR9Y2KZmgJQ==
+  snowsend:API_AWS_EXTERNAL_ID:
+    secure: AAABAIYs56opKdUG8ydrEho6um6yFTSU8nSnHxiYkfRd7jZLZqLr6vPLEr83jER54HUWx0uh7478anjNnmBzUUGH+rpHW/bQv6YuBFuVIw==
+  snowsend:API_AWS_IAM_USER_ARN:
+    secure: AAABAB2R5oPj/4i93wOWeQ/DiS+U95950pDzSHXCsFWjnLUhdBpEBLD7sZOKfs2JPtwHUETNITWdHocbYgV4JY+ALgnOUbf/1A==
   snowsend:awsAccountId: "662141974106"
-  snowsend:externalFuncId: ANALYTICS|PUBLIC|snowsend-2a31d34|string
+  snowsend:resendApiKey:
+    secure: AAABAG7l3dbEv2+Cgv/ucYzhXwZnZQsLNBra0RzQkLSoALvyZTP/6PbubVPJX1lXCm9ZbznW5SoDEX+51D1bttTuBH8=
+  snowsend:sf_ex_func_name: snowsend-de7a76b

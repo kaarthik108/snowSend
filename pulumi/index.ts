@@ -4,19 +4,19 @@ import * as pulumi from "@pulumi/pulumi";
 import * as snowflake from "@pulumi/snowflake";
 
 let config = new pulumi.Config();
-let apiAwsExternalId = config.get("apiAwsExternalId") || "default_external_id";
-let apiAwsRoleArn = config.get("apiAwsRoleArn") || "default_role_arn";
-let externalFuncId = config.get("externalFuncId");
+let resendApiKey = config.get("resendApiKey");
+let sfiamuserarn = config.get("API_AWS_IAM_USER_ARN") || "*";
+let sfexternalid = config.get("API_AWS_EXTERNAL_ID") || "**";
 
-const repo = new awsx.ecr.Repository("repo", {
+const repo = new awsx.ecr.Repository("snow_repo", {
   forceDelete: true,
 });
-const image = new awsx.ecr.Image("image", {
+const image = new awsx.ecr.Image("snow_image", {
   repositoryUrl: repo.url,
   path: "./app",
 });
 
-const lambdaRole = new aws.iam.Role("lambdaRole", {
+const lambdaRole = new aws.iam.Role("snow_lambdaRole", {
   assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal(
     aws.iam.Principals.LambdaPrincipal
   ),
@@ -28,23 +28,34 @@ const lambda = new aws.lambda.Function("snowsend", {
   role: lambdaRole.arn,
   timeout: 900,
   packageType: "Image",
+  environment: {
+    variables: {
+      RESEND_API_KEY: resendApiKey!,
+    },
+  },
 });
 
-const apiGateway = new aws.apigateway.RestApi("api");
+const apiGateway = new aws.apigateway.RestApi("snowsend");
 
-const method = new aws.apigateway.Method("method", {
+const resource = new aws.apigateway.Resource("snow_resource", {
+  parentId: apiGateway.rootResourceId,
+  pathPart: "snow",
   restApi: apiGateway.id,
-  resourceId: apiGateway.rootResourceId,
+});
+
+const method = new aws.apigateway.Method("snow_method", {
   httpMethod: "POST",
   authorization: "AWS_IAM",
+  resourceId: resource.id,
+  restApi: apiGateway.id,
 });
 
-const integration = new aws.apigateway.Integration("integration", {
-  restApi: apiGateway.id,
-  resourceId: apiGateway.rootResourceId,
+const integration = new aws.apigateway.Integration("snow_integration", {
   httpMethod: method.httpMethod,
-  integrationHttpMethod: "POST",
+  resourceId: resource.id,
+  restApi: apiGateway.id,
   type: "AWS_PROXY",
+  integrationHttpMethod: "POST",
   uri: lambda.invokeArn,
 });
 
@@ -56,7 +67,7 @@ const deployment = new aws.apigateway.Deployment(
   { dependsOn: [integration] }
 );
 
-const stage = new aws.apigateway.Stage("stage", {
+const stage = new aws.apigateway.Stage("snow_stage", {
   restApi: apiGateway.id,
   deployment: deployment.id,
   stageName: "dev",
@@ -66,7 +77,6 @@ const identity = pulumi.output(aws.getCallerIdentity({}));
 const region = pulumi.output(aws.getRegion({}));
 
 const accountId = identity.apply((id) => id.accountId);
-const regionName = region.apply((r) => r.name);
 
 const sourceArn = pulumi
   .all([region, identity, apiGateway.id])
@@ -75,30 +85,27 @@ const sourceArn = pulumi
       `arn:aws:execute-api:${region.name}:${identity.accountId}:${apiGatewayId}/*/POST/*`
   );
 
-const permission = new aws.lambda.Permission("permission", {
+const permission = new aws.lambda.Permission("snow_permission", {
   action: "lambda:InvokeFunction",
   function: lambda.name,
   principal: "apigateway.amazonaws.com",
   sourceArn: sourceArn,
 });
 
-export const url = pulumi.interpolate`${stage.invokeUrl}`;
-
 //snowflake
-const sf_role = new aws.iam.Role("role", {
+const sf_role = new aws.iam.Role("sf_role", {
   assumeRolePolicy: JSON.stringify({
     Version: "2012-10-17",
     Statement: [
       {
-        Action: "sts:AssumeRole",
-        Principal: {
-          AWS: apiAwsRoleArn,
-        },
         Effect: "Allow",
-        Sid: "",
+        Principal: {
+          AWS: sfiamuserarn,
+        },
+        Action: "sts:AssumeRole",
         Condition: {
           StringEquals: {
-            "sts:ExternalId": apiAwsExternalId,
+            "sts:ExternalId": sfexternalid,
           },
         },
       },
@@ -115,85 +122,69 @@ const methodArn = pulumi
       `arn:aws:execute-api:${regionResult.name}:${accountIdResult}:${apiId}/*/${httpMethod}/`
   );
 
-const sf_role_arn = pulumi.output(sf_role.arn).apply((arn) => arn);
-const apiGateway_id = pulumi.output(apiGateway.id).apply((id) => id);
-
-const policyDocument = pulumi
-  .all([sf_role_arn, methodArn])
-  .apply(([arn, methodArn]) => {
-    const assumedRoleArn = `${arn}/snowflake`;
-    return aws.iam
-      .getPolicyDocument({
-        statements: [
-          {
-            actions: ["execute-api:Invoke"],
-            effect: "Allow",
-            principals: [
-              {
-                type: "AWS",
-                identifiers: [assumedRoleArn],
-              },
-            ],
-            resources: [methodArn],
-          },
-        ],
-      })
-      .then((policy) => policy.json);
-  });
-
 const apiGatewayPolicy = new aws.apigateway.RestApiPolicy("apiGatewayPolicy", {
-  restApiId: apiGateway_id,
+  restApiId: apiGateway.id,
   policy: pulumi
-    .all([regionName, accountId, apiGateway_id, sf_role_arn])
-    .apply(([regionName, accountId, apiId, assumedRoleArn]) =>
-      JSON.stringify({
+    .all([region, accountId, apiGateway.id, sf_role.name])
+    .apply(([region, accountId, apiId, rolename]) => {
+      return JSON.stringify({
         Version: "2012-10-17",
         Statement: [
           {
             Effect: "Allow",
             Principal: {
-              AWS: assumedRoleArn,
+              AWS: `arn:aws:iam::${accountId}:role/${rolename}`,
             },
             Action: "execute-api:Invoke",
-            Resource: `arn:aws:execute-api:${regionName}:${accountId}:${apiId}/*/POST/*`,
+            Resource: `arn:aws:execute-api:${region.name}:${accountId}:${apiId}/*/POST/snow`,
           },
         ],
-      })
-    ),
+      });
+    }),
 });
 
 const apiIntegration = new snowflake.ApiIntegration("snowsend_api_gateway", {
-  apiAllowedPrefixes: [pulumi.interpolate`${stage.invokeUrl}`],
+  apiAllowedPrefixes: [
+    pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
+  ],
   apiAwsRoleArn: sf_role.arn,
   apiProvider: "aws_api_gateway",
   enabled: true,
 });
 
-let externalFunc;
+// const functionResource = new snowflake.Function("_req_translator", {
+//   database: "ANALYTICS",
+//   schema: "PUBLIC",
+//   returnType: "OBJECT",
+//   language: "javascript",
+//   statement: javascriptStatement,
+//   arguments: [
+//     {
+//       name: "EVENT",
+//       type: "OBJECT",
+//     },
+//   ],
+//   name: `_req_translator`,
+// });
 
-try {
-  externalFunc = pulumi.output(
-    snowflake.ExternalFunction.get("snowsend", externalFuncId!)
-  );
-  console.log("Function exists, no need to update.");
-} catch (error) {
-  console.log("Function does not exist, creating new function.");
-  externalFunc = new snowflake.ExternalFunction("snowsend", {
-    apiIntegration: apiIntegration.name,
-    args: [
-      {
-        name: "msg",
-        type: "string",
-      },
-    ],
-    returnBehavior: "VOLATILE",
-    returnType: "variant",
-    urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}`,
-    database: "ANALYTICS",
-    schema: "PUBLIC",
-  });
-}
+const sf_func = new snowflake.ExternalFunction("__snowsend", {
+  apiIntegration: apiIntegration.name,
+  args: [
+    {
+      name: "emailType",
+      type: "string",
+    },
+    {
+      name: "body",
+      type: "variant",
+    },
+  ],
+  returnBehavior: "VOLATILE",
+  returnType: "variant",
+  urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
+  database: "ANALYTICS",
+  schema: "PUBLIC",
+});
 
-export const actualApiAwsExternalId = apiIntegration.apiAwsExternalId;
-export const actualApiAwsRoleArn = apiIntegration.apiAwsRoleArn;
-export const createdExternalFuncID = externalFunc ? externalFunc.id : undefined;
+export const API_AWS_EXTERNAL_ID = apiIntegration.apiAwsExternalId;
+export const API_AWS_IAM_USER_ARN = apiIntegration.apiAwsIamUserArn;

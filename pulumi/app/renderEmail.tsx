@@ -1,10 +1,10 @@
 import { render } from "@react-email/render";
-import AppleReceiptEmail from "emails/InvoiceTemplate";
+// import AppleReceiptEmail from "emails/InvoiceTemplate";
 import TestTemplate from "emails/TestTemplate";
-import PlaidVerifyIdentityEmail from "emails/plaidVerifyIdentity";
-import SnowChatEmail from "emails/productShow";
-import SnowBrainEmail from "emails/snowbrainTemplate";
-import StripeWelcomeEmail from "emails/stripeWelcome";
+// import PlaidVerifyIdentityEmail from "emails/plaidVerifyIdentity";
+// import SnowChatEmail from "emails/productShow";
+// import SnowBrainEmail from "emails/snowbrainTemplate";
+// import StripeWelcomeEmail from "emails/stripeWelcome";
 import React from "react";
 
 interface EmailComponents {
@@ -13,11 +13,11 @@ interface EmailComponents {
 
 const emailComponents: EmailComponents = {
     "test": TestTemplate,
-    "stripe": StripeWelcomeEmail,
-    "snowbrain": SnowBrainEmail,
-    "verify": PlaidVerifyIdentityEmail,
-    "invoice": AppleReceiptEmail,
-    "product": SnowChatEmail,
+    // "stripe": StripeWelcomeEmail,
+    // "snowbrain": SnowBrainEmail,
+    // "verify": PlaidVerifyIdentityEmail,
+    // "invoice": AppleReceiptEmail,
+    // "product": SnowChatEmail,
     // Add other email types and their corresponding components
 };
 
