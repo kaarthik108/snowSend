@@ -1,7 +1,20 @@
 {
   "name": "snowsend",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "prettier '**/*.{js,ts,json}' --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix"
+  },
   "devDependencies": {
-    "@types/node": "^16"
+    "@types/node": "^16",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.33.1",
+    "prettier": "^2.8.8"
   },
   "dependencies": {
     "@pulumi/aws": "^5.23.0",

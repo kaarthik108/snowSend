@@ -1,33 +1,28 @@
-name: Deploy
-
+name: Pulumi
 on:
   push:
     branches:
-      - master
-
+      - prod
 jobs:
-  deploy_lambda:
+  update:
+    name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3.5.0
         with:
-          node-version: "18"
+          node-version-file: pulumi/package.json
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Install dependencies
+      - run: cd pulumi && npm install
+      - uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: dev
+          work-dir: pulumi
         env:
-          CI: true
-        run: |
-          cd src
-          npm ci
-      - name: Zip and deploy
-        run: |
-          cd src
-          npx ncc build index.ts
-          zip -r deploy.zip ./dist/* -x "*.react-email*"
-          aws lambda update-function-code --function-name=resend_send --zip-file=fileb://deploy.zip
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

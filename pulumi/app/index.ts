@@ -1,8 +1,4 @@
-import {
-  APIGatewayProxyEvent,
-  APIGatewayProxyResultV2,
-  Handler,
-} from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResultV2, Handler } from "aws-lambda";
 import fetch from "node-fetch";
 import { renderEmail } from "renderEmail";
 
@@ -18,9 +14,7 @@ interface EmailData {
   [key: string]: any; // This can contain title, link, or any other properties
 }
 
-export const handler: Handler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResultV2> => {
+export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
   if (!event.body) {
     return {
       statusCode: 400,
@@ -102,9 +96,7 @@ export const handler: Handler = async (
 
     if (!res.ok) {
       const errorDetails = await res.text();
-      console.error(
-        `API request failed with status ${res.status} and message: ${errorDetails}`
-      );
+      console.error(`API request failed with status ${res.status} and message: ${errorDetails}`);
       throw new Error("API request failed");
     }
 

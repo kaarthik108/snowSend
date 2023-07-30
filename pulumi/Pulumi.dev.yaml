@@ -7,10 +7,9 @@ config:
   snowflake:role: ACCOUNTADMIN
   snowflake:username: KAARTHIK
   snowsend:API_AWS_EXTERNAL_ID:
-    secure: AAABAIYs56opKdUG8ydrEho6um6yFTSU8nSnHxiYkfRd7jZLZqLr6vPLEr83jER54HUWx0uh7478anjNnmBzUUGH+rpHW/bQv6YuBFuVIw==
+    secure: AAABAKu0M6bIRY+02xUqyzrfsLltLXsDOn4lyVEouP+hxiorGY9yr15vpShg9eh4EADgopV06vMoC8w0sAnW1xu2GfamaSMMo6u22lOLcA==
   snowsend:API_AWS_IAM_USER_ARN:
-    secure: AAABAB2R5oPj/4i93wOWeQ/DiS+U95950pDzSHXCsFWjnLUhdBpEBLD7sZOKfs2JPtwHUETNITWdHocbYgV4JY+ALgnOUbf/1A==
+    secure: AAABAK+o7wVOSjXQblj/vk9+HD+WoWGrqlAwth+ubKsM6igDrvrHVGLZbcwfRsWKcICKvKQItr/AG8nWUL3Aa11jhUN7j5Vx4Q==
   snowsend:awsAccountId: "662141974106"
-  snowsend:resendApiKey:
+  snowsend:RESEND_API_KEY:
     secure: AAABAG7l3dbEv2+Cgv/ucYzhXwZnZQsLNBra0RzQkLSoALvyZTP/6PbubVPJX1lXCm9ZbznW5SoDEX+51D1bttTuBH8=
-  snowsend:sf_ex_func_name: __snowsend-9715992

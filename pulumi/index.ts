@@ -3,10 +3,14 @@ import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
 import * as snowflake from "@pulumi/snowflake";
 
-let config = new pulumi.Config();
-let resendApiKey = config.get("resendApiKey");
-let sfiamuserarn = config.get("API_AWS_IAM_USER_ARN") || "*";
-let sfexternalid = config.get("API_AWS_EXTERNAL_ID") || "**";
+const config = new pulumi.Config();
+const resendApiKey = config.get("RESEND_API_KEY");
+const sfiamuserarn = config.get("API_AWS_IAM_USER_ARN") || "*";
+const sfexternalid = config.get("API_AWS_EXTERNAL_ID") || "**";
+
+const identity = pulumi.output(aws.getCallerIdentity({}));
+const region = pulumi.output(aws.getRegion({}));
+const accountId = identity.apply((id) => id.accountId);
 
 const repo = new awsx.ecr.Repository("snow_repo", {
   forceDelete: true,
@@ -17,9 +21,7 @@ const image = new awsx.ecr.Image("snow_image", {
 });
 
 const lambdaRole = new aws.iam.Role("snow_lambdaRole", {
-  assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal(
-    aws.iam.Principals.LambdaPrincipal
-  ),
+  assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal(aws.iam.Principals.LambdaPrincipal),
   managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
 });
 
@@ -73,25 +75,17 @@ const stage = new aws.apigateway.Stage("snow_stage", {
   stageName: "dev",
 });
 
-const methodsettings = new aws.apigateway.MethodSettings(
-  "snow_methodsettings",
-  {
-    restApi: apiGateway.id,
-    stageName: stage.stageName,
-    methodPath: "*/*",
-    settings: {
-      loggingLevel: "INFO",
-      metricsEnabled: true,
-      throttlingBurstLimit: 5000,
-      throttlingRateLimit: 10000,
-    },
-  }
-);
-
-const identity = pulumi.output(aws.getCallerIdentity({}));
-const region = pulumi.output(aws.getRegion({}));
-
-const accountId = identity.apply((id) => id.accountId);
+const methodsettings = new aws.apigateway.MethodSettings("snow_methodsettings", {
+  restApi: apiGateway.id,
+  stageName: stage.stageName,
+  methodPath: "*/*",
+  settings: {
+    loggingLevel: "INFO",
+    metricsEnabled: true,
+    throttlingBurstLimit: 5000,
+    throttlingRateLimit: 10000,
+  },
+});
 
 const sourceArn = pulumi
   .all([region, identity, apiGateway.id])
@@ -107,7 +101,7 @@ const permission = new aws.lambda.Permission("snow_permission", {
   sourceArn: sourceArn,
 });
 
-//snowflake
+/* Snowflake role */
 const sf_role = new aws.iam.Role("sf_role", {
   assumeRolePolicy: JSON.stringify({
     Version: "2012-10-17",
@@ -130,43 +124,35 @@ const sf_role = new aws.iam.Role("sf_role", {
   maxSessionDuration: 3600,
 });
 
-const methodArn = pulumi
-  .all([apiGateway.id, stage.stageName, method.httpMethod, region, accountId])
-  .apply(
-    ([apiId, stageName, httpMethod, regionResult, accountIdResult]) =>
-      `arn:aws:execute-api:${regionResult.name}:${accountIdResult}:${apiId}/*/${httpMethod}/`
-  );
-
-const apiGatewayPolicy = new aws.apigateway.RestApiPolicy("apiGatewayPolicy", {
-  restApiId: apiGateway.id,
-  policy: pulumi
-    .all([region, accountId, apiGateway.id, sf_role.name])
-    .apply(([region, accountId, apiId, rolename]) => {
-      return JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Principal: {
-              AWS: `arn:aws:sts::${accountId}:assumed-role/${rolename}/snowflake`,
-            },
-            Action: "execute-api:Invoke",
-            Resource: `arn:aws:execute-api:${region.name}:${accountId}:${apiId}/*/POST/*`,
-          },
-        ],
-      });
-    }),
-});
-
 const apiIntegration = new snowflake.ApiIntegration("snowsend_api_gateway", {
-  apiAllowedPrefixes: [
-    pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
-  ],
+  apiAllowedPrefixes: [pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`],
   apiAwsRoleArn: sf_role.arn,
   apiProvider: "aws_api_gateway",
   enabled: true,
 });
 
+const policyDocument = aws.iam.getPolicyDocumentOutput({
+  statements: [
+    {
+      effect: "Allow",
+      principals: [
+        {
+          type: "AWS",
+          identifiers: ["*"] /* Restrict to specific IAM users or roles */,
+        },
+      ],
+      actions: ["execute-api:Invoke"],
+      resources: [pulumi.interpolate`arn:aws:execute-api:${region.name}:${accountId}:${apiGateway.id}/*/POST/*`],
+    },
+  ],
+});
+
+const apiGatewayPolicy = new aws.apigateway.RestApiPolicy("apiGatewayPolicy", {
+  restApiId: apiGateway.id,
+  policy: policyDocument.apply((pd) => pd.json),
+});
+
+/* Bug: pulumi creates function with quotes but external function doesnt like quotes when used with "requestTranslator" */
 // const functionResource = new snowflake.Function("_req_translator", {
 //   database: "ANALYTICS",
 //   schema: "PUBLIC",
@@ -198,17 +184,13 @@ const sf_func = new snowflake.ExternalFunction(
     ],
     returnBehavior: "VOLATILE",
     returnType: "variant",
+    // requestTranslator: "javascript", // Bug: pulumi creates function with quotes but external function doesnt like quotes when used with "requestTranslator"
     urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
     database: "ANALYTICS",
     schema: "PUBLIC",
   },
   {
-    ignoreChanges: [
-      "args",
-      "returnBehavior",
-      "returnType",
-      "urlOfProxyAndResource",
-    ],
+    ignoreChanges: ["args", "returnBehavior", "returnType", "urlOfProxyAndResource"],
   }
 );
 
