@@ -73,6 +73,21 @@ const stage = new aws.apigateway.Stage("snow_stage", {
   stageName: "dev",
 });
 
+const methodsettings = new aws.apigateway.MethodSettings(
+  "snow_methodsettings",
+  {
+    restApi: apiGateway.id,
+    stageName: stage.stageName,
+    methodPath: "*/*",
+    settings: {
+      loggingLevel: "INFO",
+      metricsEnabled: true,
+      throttlingBurstLimit: 5000,
+      throttlingRateLimit: 10000,
+    },
+  }
+);
+
 const identity = pulumi.output(aws.getCallerIdentity({}));
 const region = pulumi.output(aws.getRegion({}));
 
@@ -133,10 +148,10 @@ const apiGatewayPolicy = new aws.apigateway.RestApiPolicy("apiGatewayPolicy", {
           {
             Effect: "Allow",
             Principal: {
-              AWS: `arn:aws:iam::${accountId}:role/${rolename}`,
+              AWS: `arn:aws:sts::${accountId}:assumed-role/${rolename}/snowflake`,
             },
             Action: "execute-api:Invoke",
-            Resource: `arn:aws:execute-api:${region.name}:${accountId}:${apiId}/*/POST/snow`,
+            Resource: `arn:aws:execute-api:${region.name}:${accountId}:${apiId}/*/POST/*`,
           },
         ],
       });
@@ -167,24 +182,35 @@ const apiIntegration = new snowflake.ApiIntegration("snowsend_api_gateway", {
 //   name: `_req_translator`,
 // });
 
-const sf_func = new snowflake.ExternalFunction("__snowsend", {
-  apiIntegration: apiIntegration.name,
-  args: [
-    {
-      name: "emailType",
-      type: "string",
-    },
-    {
-      name: "body",
-      type: "variant",
-    },
-  ],
-  returnBehavior: "VOLATILE",
-  returnType: "variant",
-  urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
-  database: "ANALYTICS",
-  schema: "PUBLIC",
-});
+const sf_func = new snowflake.ExternalFunction(
+  "__snowsend",
+  {
+    apiIntegration: apiIntegration.name,
+    args: [
+      {
+        name: "emailType",
+        type: "string",
+      },
+      {
+        name: "body",
+        type: "variant",
+      },
+    ],
+    returnBehavior: "VOLATILE",
+    returnType: "variant",
+    urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
+    database: "ANALYTICS",
+    schema: "PUBLIC",
+  },
+  {
+    ignoreChanges: [
+      "args",
+      "returnBehavior",
+      "returnType",
+      "urlOfProxyAndResource",
+    ],
+  }
+);
 
 export const API_AWS_EXTERNAL_ID = apiIntegration.apiAwsExternalId;
 export const API_AWS_IAM_USER_ARN = apiIntegration.apiAwsIamUserArn;

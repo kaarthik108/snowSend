@@ -13,4 +13,4 @@ config:
   snowsend:awsAccountId: "662141974106"
   snowsend:resendApiKey:
     secure: AAABAG7l3dbEv2+Cgv/ucYzhXwZnZQsLNBra0RzQkLSoALvyZTP/6PbubVPJX1lXCm9ZbznW5SoDEX+51D1bttTuBH8=
-  snowsend:sf_ex_func_name: snowsend-de7a76b
+  snowsend:sf_ex_func_name: __snowsend-9715992
