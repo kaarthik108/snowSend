@@ -5,8 +5,8 @@ import * as snowflake from "@pulumi/snowflake";
 
 const config = new pulumi.Config();
 const resendApiKey = config.get("RESEND_API_KEY");
-const sfiamuserarn = config.get("API_AWS_IAM_USER_ARN") || "*";
-const sfexternalid = config.get("API_AWS_EXTERNAL_ID") || "**";
+const sf_iam_user_arn = config.get("API_AWS_IAM_USER_ARN") || "*";
+const sf_external_id = config.get("API_AWS_EXTERNAL_ID") || "**";
 
 const identity = pulumi.output(aws.getCallerIdentity({}));
 const region = pulumi.output(aws.getRegion({}));
@@ -109,12 +109,12 @@ const sf_role = new aws.iam.Role("sf_role", {
       {
         Effect: "Allow",
         Principal: {
-          AWS: sfiamuserarn,
+          AWS: sf_iam_user_arn,
         },
         Action: "sts:AssumeRole",
         Condition: {
           StringEquals: {
-            "sts:ExternalId": sfexternalid,
+            "sts:ExternalId": sf_external_id,
           },
         },
       },
@@ -184,7 +184,7 @@ const sf_func = new snowflake.ExternalFunction(
     ],
     returnBehavior: "VOLATILE",
     returnType: "variant",
-    // requestTranslator: "javascript", // Bug: pulumi creates function with quotes but external function doesnt like quotes when used with "requestTranslator"
+    // requestTranslator: "javascript", /* Bug: pulumi creates function with quotes but external function doesnt like quotes when used with "requestTranslator" */
     urlOfProxyAndResource: pulumi.interpolate`${stage.invokeUrl}/${resource.pathPart}`,
     database: "ANALYTICS",
     schema: "PUBLIC",
