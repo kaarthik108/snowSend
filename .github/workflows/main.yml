@@ -28,12 +28,16 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - run: npm ci
+      - name: Navigate and install dependencies
+        run: |
+          cd pulumi
+          npm ci
 
       - name: Pulumi Update
         uses: pulumi/actions@v4
         with:
           command: up
           stack-name: dev
+          work-dir: pulumi
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
