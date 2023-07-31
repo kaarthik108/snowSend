@@ -19,7 +19,7 @@ interface SnowBrainEmailProps {
     username?: string;
 }
 
-const url = process.env.URL;
+// const url = process.env.URL;
 
 
 export const SnowBrainEmail = ({
