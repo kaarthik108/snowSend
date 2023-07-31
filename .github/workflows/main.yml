@@ -7,9 +7,6 @@ jobs:
   update:
     name: Update
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: pulumi
 
     steps:
       - name: Checkout
