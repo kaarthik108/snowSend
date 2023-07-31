@@ -7,6 +7,9 @@ jobs:
   update:
     name: Update
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pulumi
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,13 +27,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - run: cd pulumi && npm ci
+      - run: npm ci
 
       - name: Pulumi Update
         uses: pulumi/actions@v4
         with:
           command: up
           stack-name: dev
-          work-dir: pulumi
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
