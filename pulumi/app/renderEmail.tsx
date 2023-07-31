@@ -21,6 +21,7 @@ const emailComponents: EmailComponents = {
     // Add other email types and their corresponding components
 };
 
+/* Dynamic email data */
 interface EmailData {
     emailType: string;
     [key: string]: any;
