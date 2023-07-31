@@ -1,15 +1,16 @@
 FROM amazon/aws-lambda-nodejs:18
+
 ARG FUNCTION_DIR="/var/task"
 
 WORKDIR /var/task
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
 RUN npm install -g typescript
 
-COPY . .
+COPY . ./
 
 RUN npm run build
 
