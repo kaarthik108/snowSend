@@ -6,6 +6,7 @@ import {
     Heading,
     Hr,
     Html,
+    Img,
     Link,
     Preview,
     Section,
@@ -17,6 +18,9 @@ import * as React from 'react';
 interface SnowBrainEmailProps {
     username?: string;
 }
+
+const url = process.env.URL;
+
 
 export const SnowBrainEmail = ({
     username = 'people from earth',
@@ -57,8 +61,8 @@ export const SnowBrainEmail = ({
                                 </Button>
                             </Section>
                             <Section className="mt-8 mb-4">
-                                <img
-                                    src={`../static/snowbrain-logo.png`}
+                                <Img
+                                    src={`${url}/snowbrain-logo.png`}
                                     alt="SnowBrain Logo"
                                     className="rounded-lg w-full max-w-md mx-auto"
                                 />

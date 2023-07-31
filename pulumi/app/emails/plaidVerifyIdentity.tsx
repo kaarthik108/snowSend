@@ -15,6 +15,8 @@ interface PlaidVerifyIdentityEmailProps {
   validationCode?: string;
 }
 
+const url = process.env.URL;
+
 export const PlaidVerifyIdentityEmail = ({
   validationCode = '144833',
 }: PlaidVerifyIdentityEmailProps) => (
@@ -23,7 +25,7 @@ export const PlaidVerifyIdentityEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`../static/plaid-logo.png`}
+          src={`${url}/plaid-logo.png`}
           width="212"
           height="88"
           alt="Plaid"

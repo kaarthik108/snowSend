@@ -14,6 +14,9 @@ import {
 import * as React from 'react';
 
 
+const url = process.env.URL;
+
+
 function StripeWelcomeEmail() {
   return (
     <Html>
@@ -23,7 +26,7 @@ function StripeWelcomeEmail() {
         <Container style={container}>
           <Section style={box}>
             <Img
-              src={`../static/stripe-logo.png`}
+              src={`${url}/stripe-logo.png`}
               width="49"
               height="21"
               alt="Stripe"

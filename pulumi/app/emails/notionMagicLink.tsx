@@ -11,10 +11,11 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
+const url = process.env.URL;
+
 interface NotionMagicLinkEmailProps {
   loginCode?: string;
 }
-
 
 export const NotionMagicLinkEmail = ({
   loginCode = 'sparo-ndigo-amurt-secan',
@@ -62,7 +63,7 @@ export const NotionMagicLinkEmail = ({
           account.
         </Text>
         <Img
-          src={`../static/notion-logo.png`}
+          src={`${url}/notion-logo.png`}
           width="32"
           height="32"
           alt="Notion's Logo"

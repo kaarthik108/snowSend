@@ -16,10 +16,13 @@ interface TestTemplateProps {
     description: string;
 };
 
+const url = process.env.URL;
+
+
 const TestTemplate: React.FC<TestTemplateProps> = ({
     title = 'Hello, User!',
     link = 'https://example.com',
-    imageLink = '../static/plaid-logo.png',
+    imageLink = `${url}/plaid-logo.png`,
     description = 'This is a sample email template.'
 }) => {
     return (
