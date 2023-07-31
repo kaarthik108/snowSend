@@ -62,7 +62,7 @@ export const SnowBrainEmail = ({
                             </Section>
                             <Section className="mt-8 mb-4">
                                 <Img
-                                    src={`${url}/snowbrain-logo.png`}
+                                    src={`https://res.cloudinary.com/dmq9hcus4/image/upload/v1690797582/snowbrain/snowbrain-logo_mq07ew.png`}
                                     alt="SnowBrain Logo"
                                     className="rounded-lg w-full max-w-md mx-auto"
                                 />
