@@ -19,9 +19,11 @@ interface SnowBrainEmailProps {
     username?: string;
 }
 
-// const url = process.env.URL;
+const baseUrl = process.env.URL
+    ? `https://${process.env.URL}`
+    : '';
 
-
+console.log('baseUrl', baseUrl);
 export const SnowBrainEmail = ({
     username = 'people from earth',
 }: SnowBrainEmailProps) => {
@@ -32,8 +34,8 @@ export const SnowBrainEmail = ({
             <Head />
             <Preview>{previewText}</Preview>
             <Tailwind>
-                <Body className="bg-gray-100 flex justify-center items-center h-screen font-sans">
-                    <Container className="bg-white border border-gray-300 rounded-lg mx-auto p-8 w-full max-w-2xl">
+                <Body className="bg-gray-100 my-auto mx-auto font-sans">
+                    <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
                         <Section className="flex justify-center text-5xl font-bold mb-8">
                             <Text className="text-gray-900">SnowBrain</Text>
                         </Section>
@@ -57,12 +59,12 @@ export const SnowBrainEmail = ({
                                     className="bg-blue-600 hover:bg-blue-700 rounded text-white text-sm font-semibold"
                                     href="https://snowbrain.dev"
                                 >
-                                    Experience SnowBrain
+                                    Experience snowBrain
                                 </Button>
                             </Section>
                             <Section className="mt-8 mb-4">
                                 <Img
-                                    src={`https://res.cloudinary.com/dmq9hcus4/image/upload/v1690797582/snowbrain/snowbrain-logo_mq07ew.png`}
+                                    src={`${baseUrl}/static/snowbrain-logo.png`}
                                     alt="SnowBrain Logo"
                                     className="rounded-lg w-full max-w-md mx-auto"
                                 />
