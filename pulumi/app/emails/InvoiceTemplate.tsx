@@ -14,7 +14,7 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-const url = process.env.URL;
+const baseUrl = process.env["URL"];
 
 export const AppleReceiptEmail = () => (
     <Html>
@@ -26,7 +26,7 @@ export const AppleReceiptEmail = () => (
                 <Section>
                     <Column>
                         <Img
-                            src={`${url}/apple-logo.png`}
+                            src={`${baseUrl}/apple-logo.png`}
                             width="42"
                             height="42"
                             alt="Apple Logo"
@@ -109,7 +109,7 @@ export const AppleReceiptEmail = () => (
                 <Section>
                     <Column style={{ width: '64px' }}>
                         <Img
-                            src={`${url}/apple-hbo-max-icon.jpeg`}
+                            src={`${baseUrl}/apple-hbo-max-icon.jpeg`}
                             width="64"
                             height="64"
                             alt="HBO Max"
@@ -155,7 +155,7 @@ export const AppleReceiptEmail = () => (
                 <Section>
                     <Column align="center" style={block}>
                         <Img
-                            src={`${url}/apple-card-icon.png`}
+                            src={`${baseUrl}/apple-card-icon.png`}
                             width="60"
                             height="17"
                             alt="Apple Card"
@@ -174,7 +174,7 @@ export const AppleReceiptEmail = () => (
                             style={walletLink}
                         >
                             <Img
-                                src={`${url}/apple-wallet.png`}
+                                src={`${baseUrl}/apple-wallet.png`}
                                 width="28"
                                 height="28"
                                 alt="Apple Wallet"
@@ -248,7 +248,7 @@ export const AppleReceiptEmail = () => (
                 <Section>
                     <Column align="center" style={footerIcon}>
                         <Img
-                            src={`${url}/apple-logo.png`}
+                            src={`${baseUrl}/apple-logo.png`}
                             width="26"
                             height="26"
                             alt="Apple Card"

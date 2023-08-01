@@ -18,10 +18,7 @@ import * as React from 'react';
 interface SnowBrainEmailProps {
     username?: string;
 }
-
-const baseUrl = process.env.URL
-    ? `https://${process.env.URL}`
-    : '';
+const baseUrl = process.env["URL"];
 
 console.log('baseUrl', baseUrl);
 export const SnowBrainEmail = ({
@@ -36,9 +33,6 @@ export const SnowBrainEmail = ({
             <Tailwind>
                 <Body className="bg-gray-100 my-auto mx-auto font-sans">
                     <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
-                        <Section className="flex justify-center text-5xl font-bold mb-8">
-                            <Text className="text-gray-900">SnowBrain</Text>
-                        </Section>
                         <Section className="text-center">
                             <Heading className="text-gray-900 text-2xl font-semibold mb-4">
                                 Unleash the Power of <strong>SnowBrain</strong>
@@ -64,7 +58,7 @@ export const SnowBrainEmail = ({
                             </Section>
                             <Section className="mt-8 mb-4">
                                 <Img
-                                    src={`${baseUrl}/static/snowbrain-logo.png`}
+                                    src={`${baseUrl}/snowbrain-logo.png`}
                                     alt="SnowBrain Logo"
                                     className="rounded-lg w-full max-w-md mx-auto"
                                 />

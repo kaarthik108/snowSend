@@ -10,6 +10,8 @@ config:
     secure: AAABAKu0M6bIRY+02xUqyzrfsLltLXsDOn4lyVEouP+hxiorGY9yr15vpShg9eh4EADgopV06vMoC8w0sAnW1xu2GfamaSMMo6u22lOLcA==
   snowsend:API_AWS_IAM_USER_ARN:
     secure: AAABAK+o7wVOSjXQblj/vk9+HD+WoWGrqlAwth+ubKsM6igDrvrHVGLZbcwfRsWKcICKvKQItr/AG8nWUL3Aa11jhUN7j5Vx4Q==
-  snowsend:awsAccountId: "662141974106"
   snowsend:RESEND_API_KEY:
     secure: AAABAG7l3dbEv2+Cgv/ucYzhXwZnZQsLNBra0RzQkLSoALvyZTP/6PbubVPJX1lXCm9ZbznW5SoDEX+51D1bttTuBH8=
+  snowsend:URL:
+    secure: AAABAGN3KBZ7/S0Q2KpAssfSJ5AQkjb4kKeHNftFSYak/UHZlzrrYfuVjFc3EXkbYsWBECSZWWJm1scyZcu6J5M=
+  snowsend:awsAccountId: "662141974106"

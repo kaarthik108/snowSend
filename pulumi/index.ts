@@ -5,6 +5,7 @@ import * as snowflake from "@pulumi/snowflake";
 
 const config = new pulumi.Config();
 const resendApiKey = config.get("RESEND_API_KEY");
+const imageUrl = config.get("URL") || "";
 const sf_iam_user_arn = config.get("API_AWS_IAM_USER_ARN") || "*";
 const sf_external_id = config.get("API_AWS_EXTERNAL_ID") || "**";
 
@@ -25,6 +26,55 @@ const lambdaRole = new aws.iam.Role("snow_lambdaRole", {
   managedPolicyArns: [aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole],
 });
 
+const lambdaS3AccessPolicy = new aws.iam.Policy("lambdaS3AccessPolicy", {
+  path: "/",
+  description: "Allows lambda function to access S3",
+  policy: JSON.stringify({
+    Version: "2012-10-17",
+    Statement: [
+      {
+        Action: ["s3:GetObject"],
+        Effect: "Allow",
+        Resource: "arn:aws:s3:::snowsend/*",
+      },
+    ],
+  }),
+});
+
+const lambdaRolePolicyAttachment = new aws.iam.RolePolicyAttachment("lambdaRolePolicyAttachment", {
+  role: lambdaRole.name,
+  policyArn: lambdaS3AccessPolicy.arn,
+});
+
+// /* [optional] create an s3 bucket */
+// const bucket = new aws.s3.Bucket("snowsend", {
+//   corsRules: [
+//     {
+//       allowedMethods: ["GET"],
+//       allowedOrigins: ["*"],
+//       allowedHeaders: ["*"],
+//     },
+//   ],
+// });
+
+// /* [optional] create a bucket policy */
+// const bucketPolicy = new aws.s3.BucketPolicy("snow_bucketPolicy", {
+//   bucket: bucket.id,
+//   policy: bucket.arn.apply((arn) =>
+//     JSON.stringify({
+//       Version: "2012-10-17",
+//       Statement: [
+//         {
+//           Effect: "Allow",
+//           Principal: "*",
+//           Action: ["s3:GetObject"],
+//           Resource: [`${arn}/*`],
+//         },
+//       ],
+//     })
+//   ),
+// });
+
 const lambda = new aws.lambda.Function("snowsend", {
   imageUri: image.imageUri,
   role: lambdaRole.arn,
@@ -33,6 +83,7 @@ const lambda = new aws.lambda.Function("snowsend", {
   environment: {
     variables: {
       RESEND_API_KEY: resendApiKey!,
+      URL: imageUrl!,
     },
   },
 });

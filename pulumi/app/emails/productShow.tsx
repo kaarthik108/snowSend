@@ -19,7 +19,7 @@ interface SnowChatEmailProps {
     userImage?: string;
 }
 
-const url = process.env.URL;
+const baseUrl = process.env["URL"];
 
 
 export const SnowChatEmail = ({
@@ -36,7 +36,7 @@ export const SnowChatEmail = ({
                     <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
                         <Section className="mt-[32px]">
                             <Img
-                                src={`${url}/snowchat-logo.png`}
+                                src={`${baseUrl}/snowchat-logo.png`}
                                 width="40"
                                 height="37"
                                 alt="snowChat"
