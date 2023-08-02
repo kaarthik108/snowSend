@@ -1,10 +1,10 @@
-# 📯 snowSend
+<h1 align="center">snowSend 📯</h1>
 
-<!-- <p align="center">
-  <img src="" alt="snowSend Logo" width="200" />
-</p> -->
+**snowSend** is an open-source prototype that empowers you to dispatch custom-styled emails directly from Snowflake. React to real-time triggers and provide a unique experience with emails stylized using React-Email components.
 
-Send Dynamic emails directly from Snowflake with **snowSend**. snowSend is an open-source prototype that empowers you to dispatch custom-styled emails directly from Snowflake. React to real-time triggers and provide a unique experience with emails stylized using React-Email components.
+![665shots_so](https://github.com/kaarthik108/snowSend/assets/53030784/1c10721f-a033-4c03-bab0-3c33f5b523de)
+
+
 
 ## ⚙️ Tech Stack
 
