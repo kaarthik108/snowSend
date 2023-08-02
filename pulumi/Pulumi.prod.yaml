@@ -1,0 +1,9 @@
+config:
+  aws:region:
+  snowflake:account: 
+  snowflake:password:
+    secure: 
+  snowflake:region:
+  snowflake:role:
+  snowflake:username:
+  snowsend:awsAccountId: ""

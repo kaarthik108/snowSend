@@ -41,14 +41,11 @@ Follow these steps to get **snowSend** up and running in your environment.
 
 3. **Pulumi setup**
 
-    - Navigate to the `pulumi` directory, edit `Pulumi.dev.yaml` to remove the following config values:
+    - Navigate to the `pulumi` directory, edit `Pulumi.prod.yaml` add the config values, use the below command
+    to set for all other configs
 
-    ```yaml
-    snowsend:API_AWS_EXTERNAL_ID:
-        secure: AAABAKu0M6bIRY+02xUqyzrfsLltLXsDOn4lyVEouP
-
-    snowsend:API_AWS_IAM_USER_ARN:
-        secure: AAABAK+o7wVOSjXQblj/vk9+HD+WoWGrqlAwth+ubK
+    ```bash
+    pulumi config set snowflake:password your_password --secret
     ```
 
     - Install npm packages and check the email components:

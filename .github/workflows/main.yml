@@ -39,11 +39,11 @@ jobs:
           cd pulumi
           npm ci
 
-      - name: Pulumi Update
-        uses: pulumi/actions@v4
-        with:
-          command: up
-          stack-name: dev
-          work-dir: pulumi
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      # - name: Pulumi Update
+      #   uses: pulumi/actions@v4
+      #   with:
+      #     command: up
+      #     stack-name: dev
+      #     work-dir: pulumi
+      #   env:
+      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
