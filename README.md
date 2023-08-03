@@ -36,6 +36,8 @@ Follow these steps to get **snowSend** up and running in your environment.
     Sign up on Resend and retrieve the API Key:
 
     ```bash
+    cd pulumi
+    npm i
     pulumi config set RESEND_API_KEY your_resend_api_key --secret
     ```
 
@@ -64,7 +66,7 @@ Follow these steps to get **snowSend** up and running in your environment.
     pulumi up
     ```
 
-    - Configure `API_AWS_EXTERNAL_ID` and `API_AWS_IAM_USER_ARN` values:
+    - Configure `API_AWS_EXTERNAL_ID` and `API_AWS_IAM_USER_ARN` values (you will get these values once you run pulumi up from previous step as stack output):
 
     ```bash
     pulumi config set API_AWS_EXTERNAL_ID $(pulumi stack output API_AWS_EXTERNAL_ID) --secret
@@ -83,6 +85,8 @@ Follow these steps to get **snowSend** up and running in your environment.
     ```
 
 Remember to replace the values in `test.py` with your function names (`EXTERNAL_FUNC` and `TRANSLATOR_UDF`).
+
+Additionally, you can host your images either in s3 or snowflake. set `pulumi config set url https://s3:xyz/s3.amazonaws.com` if you have images in s3
 
 ## 🤝 Contributing
 

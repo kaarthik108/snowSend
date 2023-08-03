@@ -6,6 +6,17 @@ TRANSLATOR_UDF = "_request_translator"
 
 
 class SnowSendTest:
+    """
+    This class is used to deploy transalotor UDF & test the external function.
+
+    Attributes:
+        session: The session of the Snowflake connection.
+
+    Methods:
+        execute_sql_from_file: Execute the SQL commands from the file.
+
+    """
+
     def __init__(self):
         self.session = SnowflakeConnection().get_session()
 
@@ -19,7 +30,7 @@ class SnowSendTest:
         )
 
         print(f"The SQL commands to be executed:\n {sql_commands}")
-        # self.session.sql(sql_commands).collect()
+        self.session.sql(sql_commands).collect()
 
 
 if __name__ == "__main__":
